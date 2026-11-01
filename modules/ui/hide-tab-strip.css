@@ -1,0 +1,12 @@
+/*
+ * Hide the horizontal tab strip, for when a sidebar extension (Tree Style Tab,
+ * Sidebery...) shows the tabs instead. Firefox's native vertical tabs hide the
+ * strip by themselves and don't need this.
+ *
+ * With Firefox drawing its own title bar (browser.tabs.inTitlebar = 1), the
+ * window buttons live in this strip and disappear with it; tiling window
+ * managers don't need them.
+ */
+#TabsToolbar {
+  visibility: collapse !important;
+}

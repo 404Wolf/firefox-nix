@@ -1,0 +1,84 @@
+/*
+ * Auto-hiding toolbox (Firefox 159+).
+ *
+ * The toolbox (menu bar, tab strip, nav bar, bookmarks bar) is taken out of
+ * the layout and parked just above the window, so the page and the sidebar
+ * use the full window height. It slides in over the page, without reflowing
+ * it, while anything in it has focus (Ctrl+L, Alt+D, F6, or tabbing into a
+ * toolbar button) and while one of its menus or panels is open, then hides
+ * again on Escape or when focus moves back to the page.
+ *
+ * It is the same technique as Firefox's own "mini window" mode
+ * (browser-shared.css, `:root[mini-window] #navigator-toolbox`): the toolbox
+ * stays in the document and focusable while hidden, so Ctrl+L still works.
+ *
+ * Fullscreen and customize mode are left alone: Firefox hides the toolbox
+ * itself in fullscreen, and customizing needs it in place.
+ */
+
+:root:not([customizing], [inFullscreen]) {
+  #navigator-toolbox {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    /* Above the content, the sidebar, and the expand-on-hover sidebar (4). */
+    z-index: 5;
+
+    transform: translateY(-100%);
+    opacity: 0;
+
+    /* The window background normally shows through the toolbox; as an overlay
+     * it needs its own, including a theme's header image. */
+    background-color: var(--toolbox-background-color);
+    background-image: var(--toolbox-background-image);
+    background-repeat: var(--toolbox-background-repeat);
+    background-position: var(--toolbox-background-position);
+    background-size: var(--toolbox-background-size);
+    border-block-end: var(--border-width, 1px) solid var(--chrome-content-separator-color);
+    box-shadow: var(--content-area-shadow, none);
+
+    &:-moz-window-inactive {
+      background-color: var(--toolbox-background-color-inactive);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        transform 150ms ease-out,
+        opacity 100ms ease-out;
+    }
+  }
+
+  /* Revealed: something in the toolbox has focus (the URL bar, its results,
+   * a toolbar button), or one of its menus or buttons is open. Focus only
+   * counts while the window is active, so switching away doesn't leave it
+   * stuck open. */
+  #navigator-toolbox:is(:focus-within:not(:-moz-window-inactive), :has([open])),
+  /* ...or a panel anchored to it is open. Panels live outside the toolbox, in
+   * #mainPopupSet, and carry [panelopen] while showing. */
+  &:has(
+      :is(
+          #appMenu-popup,
+          #downloadsPanel,
+          #unified-extensions-panel,
+          #customizationui-widget-panel,
+          #widget-overflow,
+          #identity-popup,
+          #permission-popup,
+          #protections-popup,
+          #notification-popup,
+          #editBookmarkPanel,
+          #full-page-translations-panel
+        )[panelopen]
+    )
+    #navigator-toolbox {
+    transform: none;
+    opacity: 1;
+  }
+
+  /* The page's top edge no longer meets the toolbox, so drop the separator
+   * line and rounded corners Firefox draws there (as it does in fullscreen). */
+  #tabbrowser-tabpanels .browserContainer {
+    --content-area-start-radius: 0 !important;
+    border-block-start: none !important;
+  }
+}

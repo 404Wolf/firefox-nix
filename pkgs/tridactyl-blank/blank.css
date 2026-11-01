@@ -1,0 +1,17 @@
+/* Firefox's own new tab background, light and dark. blank.js swaps in the
+   theme's ntp_background / ntp_text when a theme sets them. */
+:root {
+    color-scheme: light dark;
+    background-color: var(--ntp-background, light-dark(@LIGHT_BG@, @DARK_BG@));
+    color: var(--ntp-text, CanvasText);
+}
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+}
+
+#trinewtab {
+    display: none !important;
+}

@@ -1,0 +1,41 @@
+{
+  "testId": "webext-test@nix",
+  "intruderId": "intruder@nix",
+  "uuid": "6f1c0a52-9a5e-4d2b-8a43-0d8b5f2e7c11",
+  "localForce": {
+    "forceKey": "nix",
+    "acct_alice_setting": "explicit beats template",
+    "ключ-🔑": "unicode key",
+    "types": {
+      "1": "index-like key",
+      "string": "latin1 ü and utf16 日本語 😀",
+      "int": -42,
+      "big": 1099511627776,
+      "float": 2.5,
+      "bool": true,
+      "null": null,
+      "emptyObject": {},
+      "emptyList": [],
+      "nested": { "list": [1, "two", [3], { "four": false }] }
+    }
+  },
+  "localDefaults": { "defKey": "nix-default" },
+  "localTemplates": {
+    "accounts": {
+      "idsFromKeys": "^acct_([a-z]+)_",
+      "force": { "acct_{id}_setting": { "timeout": "onRestart" } },
+      "defaults": { "acct_{id}_def": "nix-default" }
+    }
+  },
+  "syncForce": { "syncForce": { "a": [1, 2] } },
+  "syncDefaults": { "syncDef": "nix-default" },
+  "manifestCommands": {
+    "cmd-set": "Alt+Shift+1",
+    "cmd-unset": "Alt+Shift+2",
+    "cmd-untouched": "Alt+Shift+3"
+  },
+  "commands": { "cmd-set": "Ctrl+Shift+Y", "cmd-unset": null },
+  "managed": { "managedKey": "from policy" },
+  "lockedPref": "browser.startup.homepage",
+  "lockedValue": "about:blank"
+}
